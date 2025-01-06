@@ -83,7 +83,7 @@ export const ChatAPIDoc = async (props: PromptGPTProps) => {
   const context = relevantDocuments
     .map((result, index) => {
       const content = result.pageContent.replace(/(\r\n|\n|\r)/gm, "");
-      const context = `[${index}]. よくある質問: ${result.source} \n file id: ${result.id} \n ${content}`;
+      const context = `[${index}]. NAME: ${result.source} \n file id: ${result.id} \n ${content}`;
       return context;
     })
     .join("\n------\n");
