@@ -1,5 +1,5 @@
 export class BingSearchResult {
-  async  SearchWeb(searchText: string)  {
+  async  SearchWeb(searchText: string, p0: { freshness: string; count: number; })  {
     var url : string  = "https://api.bing.microsoft.com/v7.0/search?count=10&offset=0&responseFilter=Webpages&setLang=ja-jp&q=";
     url = url + searchText;
     try {
