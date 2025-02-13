@@ -88,13 +88,14 @@ export const ChatAPIDoc = async (props: PromptGPTProps) => {
     userId: userId,
   });
 
+  const chatDoc = props.chatDoc;
   const history = await chatHistory.getMessages();
   const topHistory = history.slice(history.length - 30, history.length);
 
   // 関連文書の検索数を増やし、より多くの文脈を提供
   const relevantDocuments = await findRelevantDocuments(
     lastHumanMessage.content,
-    id
+    chatDoc
   );
 
   // コンテキスト情報の構造化
@@ -256,6 +257,7 @@ export const ChatAPIDoc = async (props: PromptGPTProps) => {
   }
 };
 
+/*
 const findRelevantDocuments = async (query: string, chatThreadId: string) => {
   // 検索結果の数を増やし、より多くの関連文書を取得
   const relevantDocuments = await similaritySearchVectorWithScore(query, 15, {
@@ -263,5 +265,22 @@ const findRelevantDocuments = async (query: string, chatThreadId: string) => {
   });
   
   // 検索結果をそのまま返す（すべての関連文書を含める）
+  return relevantDocuments;
+};*/
+
+const findRelevantDocuments = async (query: string, chatDoc: string) => {
+  // パラメータ名をchatDocに変更し、型も文字列として明示
+  //const chatDoc: string = chatThreadId;
+
+  // 元のfilter条件を復元
+  const filter = chatDoc === 'all'
+    ? "chatType eq 'doc'"
+    : `chatType eq 'doc' and deptName eq '${chatDoc}'`;
+
+  // 検索結果数を10に戻す
+  const relevantDocuments = await similaritySearchVectorWithScore(query, 15, {
+    filter: filter,
+  });
+  
   return relevantDocuments;
 };
